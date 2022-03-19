@@ -1,5 +1,5 @@
 {
-  "name": "puppet-profile_slurm_metrics",
+  "name": "puppet-profile_slurm",
   "version": "0.1.0",
   "author": "bsper2",
   "summary": "",

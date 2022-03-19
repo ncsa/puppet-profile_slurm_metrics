@@ -1,0 +1,10 @@
+<%- | $command,
+      $interval,
+      $timeout,
+| -%>
+# This file is managed by Puppet
+[[inputs.exec]]
+  command = "<%= $command %>"
+  timeout = "<%= $timeout %>"
+  interval = "<%= $interval %>"
+  data_format = "influx"

@@ -1,1 +1,30 @@
---- {}
+---
+
+profile_slurm::client::firewall::slurmd_port: 6818
+profile_slurm::client::firewall::sources: []
+
+profile_slurm::scheduler::firewall::slurmdbd_port: 6819
+profile_slurm::scheduler::firewall::slurmctld_port: 6817
+profile_slurm::scheduler::firewall::sources: []
+
+profile_slurm::telegraf::slurm_detail_stats::enable: true
+profile_slurm::telegraf::slurm_detail_stats::interval: "5m"
+profile_slurm::telegraf::slurm_detail_stats::timeout: "2m"
+
+profile_slurm::telegraf::slurm_job_efficiency::enable: true
+profile_slurm::telegraf::slurm_job_efficiency::interval: "1h"
+profile_slurm::telegraf::slurm_job_efficiency::timeout: "10m"
+
+profile_slurm::telegraf::slurm_stats::enable: true
+profile_slurm::telegraf::slurm_stats::interval: "1m"
+profile_slurm::telegraf::slurm_stats::timeout: "55s"
+
+profile_slurm::telegraf::telegraf::enable: true
+profile_slurm::telegraf::telegraf::required_pkgs:
+  - "telegraf"
+profile_slurm::telegraf::telegraf::script_path: "/etc/telegraf/scripts/slurm"
+profile_slurm::telegraf::telegraf::slurm_database: "slurm_acct_db"
+profile_slurm::telegraf::telegraf::slurm_job_table: ""
+profile_slurm::telegraf::telegraf::slurm_password: ""  # Needs to be setup as a VAULT lookup in your project control repo
+profile_slurm::telegraf::telegraf::slurm_path: "/usr/bin"
+profile_slurm::telegraf::telegraf::slurm_username: "slurmdbd"

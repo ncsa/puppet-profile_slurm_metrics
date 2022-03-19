@@ -1,0 +1,12 @@
+<%- | $slurm_path,
+      $username,
+      $password,
+      $database,
+      $job_table,
+| -%>
+# This file is managed by Puppet
+slurm_path="<%= $slurm_path %>"
+username=<%= $username %>
+password=<%= $password %>
+database=<%= $database %>
+job_table=<%= $job_table %>
