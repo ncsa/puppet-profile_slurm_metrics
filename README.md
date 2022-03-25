@@ -34,7 +34,7 @@ For a Slurm scheduler:
 include ::profile_slurm::scheduler
 ```
 
-For a Slurm monitor node (Include this on the node the hosts the slurmdb):
+For a Slurm monitor node (Include this on the node that hosts the `slurmdb`):
 ```
 include ::profile_slurm::monitor
 ```
