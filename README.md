@@ -16,7 +16,7 @@ NCSA Customizations for Slurm
 
 ## Description
 
-This is a module to add NCSA customizations to a Slurm client/scheduler/monitor node. It does not do the initial install/config of Slurm, that is handled by other modules (see [treydock/slurm](https://forge.puppet.com/modules/treydock/slurm) )
+This is a module to add NCSA customizations to a Slurm client/scheduler/monitor node. It does not do the initial install/config of Slurm, that is handled by other modules (see [treydock/slurm](https://forge.puppet.com/modules/treydock/slurm) and [treydock/slurm_providers](https://forge.puppet.com/modules/treydock/slurm_providers) )
 
 Currently this module:
 - Adds more fine grained controls for firewalls, so will want to set `slurm::manage_firewall: false` from treydock/slurm to `false`
