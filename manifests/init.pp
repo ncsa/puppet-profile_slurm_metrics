@@ -1,6 +1,5 @@
-# @summary A short summary of the purpose of this class
+# @summary Blank init, profiles should include other classes in this module
 #
-# A description of what this class does
 #
 # @example
 #   include profile_slurm
