@@ -6,5 +6,6 @@
 class profile_slurm::scheduler {
 
   include profile_slurm::scheduler::firewall
+  include profile_slurm::scheduler::storage
 
 }

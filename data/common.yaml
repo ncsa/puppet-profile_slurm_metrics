@@ -3,9 +3,22 @@
 profile_slurm::client::firewall::slurmd_port: 6818
 profile_slurm::client::firewall::sources: []
 
+profile_slurm::compute::storage::require_storage:
+  - "Service['slurmd']"
+profile_slurm::compute::storage::storage_dependencies: []
+profile_slurm::compute::storage::tmpfs_dir: null
+profile_slurm::compute::storage::tmpfs_dir_refresh_command: null
+profile_slurm::compute::storage::tmpfs_dir_refreshed_by: null
+
 profile_slurm::scheduler::firewall::slurmdbd_port: 6819
 profile_slurm::scheduler::firewall::slurmctld_port: 6817
 profile_slurm::scheduler::firewall::sources: []
+
+profile_slurm::scheduler::storage::require_storage:
+  - "Service['mysqld']"
+  - "Service['slurmctld']"
+  - "Service['slurmdbd']"
+profile_slurm::scheduler::storage::storage_dependencies: []
 
 profile_slurm::telegraf::slurm_detail_stats::enable: true
 profile_slurm::telegraf::slurm_detail_stats::interval: "5m"

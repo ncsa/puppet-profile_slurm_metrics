@@ -6,12 +6,15 @@
 
 ### Classes
 
-* [`profile_slurm`](#profile_slurm): A short summary of the purpose of this class
+* [`profile_slurm`](#profile_slurm): Blank init, profiles should include other classes in this module
 * [`profile_slurm::client`](#profile_slurmclient): Setup slurm config for slurm client
 * [`profile_slurm::client::firewall`](#profile_slurmclientfirewall): Setup firewall on slurm client
+* [`profile_slurm::compute`](#profile_slurmcompute): Setup slurm config for slurm compute node
+* [`profile_slurm::compute::storage`](#profile_slurmcomputestorage): Setup underlying storage for slurm compute nodes
 * [`profile_slurm::monitor`](#profile_slurmmonitor): Sets up monitoring and collecting of slurm scheduler stats
 * [`profile_slurm::scheduler`](#profile_slurmscheduler): Sets up configs for scheduler node
 * [`profile_slurm::scheduler::firewall`](#profile_slurmschedulerfirewall): Setup firewall on slurm scheduler
+* [`profile_slurm::scheduler::storage`](#profile_slurmschedulerstorage)
 * [`profile_slurm::telegraf::slurm_detail_stats`](#profile_slurmtelegrafslurm_detail_stats): Configure the telegraf collection script slurm_detail_stats
 * [`profile_slurm::telegraf::slurm_job_efficiency`](#profile_slurmtelegrafslurm_job_efficiency): Configure the telegraf collection script slurm_job_efficiency
 * [`profile_slurm::telegraf::slurm_stats`](#profile_slurmtelegrafslurm_stats): Configure the telegraf collection script slurm_stats
@@ -21,7 +24,7 @@
 
 ### <a name="profile_slurm"></a>`profile_slurm`
 
-A description of what this class does
+Blank init, profiles should include other classes in this module
 
 #### Examples
 
@@ -73,6 +76,83 @@ Destination ports that need to be open for the slurmd service
 Data type: `Array[String]`
 
 Array of CIDRs that need to be open for the slurmd service
+
+### <a name="profile_slurmcompute"></a>`profile_slurm::compute`
+
+Setup slurm config for slurm compute node
+
+#### Examples
+
+##### 
+
+```puppet
+include profile_slurm::compute
+```
+
+### <a name="profile_slurmcomputestorage"></a>`profile_slurm::compute::storage`
+
+Setup underlying storage for slurm compute nodes
+
+#### Examples
+
+##### 
+
+```puppet
+include profile_slurm::scheduler::storage
+```
+
+#### Parameters
+
+The following parameters are available in the `profile_slurm::compute::storage` class:
+
+* [`require_storage`](#require_storage)
+* [`storage_dependencies`](#storage_dependencies)
+* [`tmpfs_dir`](#tmpfs_dir)
+* [`tmpfs_dir_refresh_command`](#tmpfs_dir_refresh_command)
+* [`tmpfs_dir_refreshed_by`](#tmpfs_dir_refreshed_by)
+
+##### <a name="require_storage"></a>`require_storage`
+
+Data type: `Array[String]`
+
+Optionally list resources (e.g., services) that require storage
+in order to function.
+
+##### <a name="storage_dependencies"></a>`storage_dependencies`
+
+Data type: `Array[String]`
+
+Optionally list resources (e.g. mounts) that should be present before
+setting up Slurm on a compute node. Should be in the form that would
+be specified as a requirement ("before") various Slurm compute (slurmd)
+resources, e.g.:
+  - "Lvm::Logical_volume::local"
+
+##### <a name="tmpfs_dir"></a>`tmpfs_dir`
+
+Data type: `Optional[String]`
+
+Directory to create for job_container/tmpfs ("job /tmp" directory).
+Created by File resource or Exec depending on value of
+$tmpfs_dir_refeshed_by.
+E.g.: "/local/slurmjobs"
+
+##### <a name="tmpfs_dir_refresh_command"></a>`tmpfs_dir_refresh_command`
+
+Data type: `Optional[String]`
+
+Optional command that should refresh $tmpfs_dir. If not specified,
+then "rm -rf ${tmpfs_dir}" will be used.
+
+##### <a name="tmpfs_dir_refreshed_by"></a>`tmpfs_dir_refreshed_by`
+
+Data type: `Optional[String]`
+
+Resource which $tmpfs_dir requires and which should cause it to be
+refreshed (removed and recreated). If this is NOT defined, and
+$tmpfs_dir IS defined, then Puppet will simply ensure that $tmpfs_dir
+exists.
+E.g.: "Lvm::Logical_volume['local']"
 
 ### <a name="profile_slurmmonitor"></a>`profile_slurm::monitor`
 
@@ -135,6 +215,42 @@ Destination port that need to be open for the slurmdbd service
 Data type: `Array[String]`
 
 Array of CIDRs that need to be open for the slurmctld and slurmdbd service
+
+### <a name="profile_slurmschedulerstorage"></a>`profile_slurm::scheduler::storage`
+
+The profile_slurm::scheduler::storage class.
+
+#### Examples
+
+##### 
+
+```puppet
+include profile_slurm::scheduler::storage
+```
+
+#### Parameters
+
+The following parameters are available in the `profile_slurm::scheduler::storage` class:
+
+* [`storage_dependencies`](#storage_dependencies)
+* [`require_storage`](#require_storage)
+
+##### <a name="storage_dependencies"></a>`storage_dependencies`
+
+Data type: `Array[String]`
+
+Optionally list resources (e.g. mounts) that should be present before
+setting up Slurm on a scheduler. Should be in the form that would
+be specified as a requirement ("before") various Slurm scheduler
+resources, e.g.:
+  Lvm::Logical_volume::mysql
+  Lvm::Logical_volume::slurm
+
+##### <a name="require_storage"></a>`require_storage`
+
+Data type: `Array[String]`
+
+
 
 ### <a name="profile_slurmtelegrafslurm_detail_stats"></a>`profile_slurm::telegraf::slurm_detail_stats`
 
