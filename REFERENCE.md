@@ -423,9 +423,12 @@ Slurm job table to query
 
 ##### <a name="slurm_password"></a>`slurm_password`
 
-Data type: `String`
+Data type: `Optional[String]`
 
 Password for the slurm user account
+Leave blank if using MySQL socket authentication
+
+Default value: `''`
 
 ##### <a name="slurm_path"></a>`slurm_path`
 

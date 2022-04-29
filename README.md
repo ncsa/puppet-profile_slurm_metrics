@@ -66,7 +66,7 @@ profile_slurm::compute::storage::tmpfs_dir_refreshed_by: "Mount[/local]"
 ```
 
 You will want to set these hiera variables for scheduler nodes:
-```
+```yaml
 profile_slurm::scheduler::firewall::sources:
   - "192.168.0.0/24"  # Allow access to slurmdbd and slurmctld from 192.168.0.0/24 net
 # and generally specify dependencies on local storage:
@@ -76,9 +76,20 @@ profile_slurm::scheduler::storage::storage_dependencies:
   - "Mount['/var/spool/slurmctld.state']"
 ```
 
+### Telegraf Monitoring
+
 You will want to set these hiera variables for a node running the telegraf monitoring:
-```
+```yaml
 profile_slurm::telegraf::telegraf::slurm_job_table: ""
+```
+
+If using MySQL ***with*** socket authentication, you'll also need to set the following because the `telegraf` user cannot use socket auth to connect as another user:
+```yaml
+profile_slurm::telegraf::slurm_username: "telegraf"
+```
+
+If using MySQL ***without*** socket authentication, you'll also need to set the following to lookup the password:
+```yaml
 profile_slurm::telegraf::telegraf::slurm_password: "%{lookup('slurm::slurmdbd_storage_pass')}"  # This is a VAULT lookup, use the keyname you have chosen for storing the slurmdb user account password
 ```
 
@@ -90,5 +101,4 @@ n/a
 ## Reference
 
 See: [REFERENCE.md](REFERENCE.md)
-
 

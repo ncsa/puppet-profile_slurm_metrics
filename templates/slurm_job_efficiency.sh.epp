@@ -6,7 +6,15 @@
 tfile=$(mktemp /tmp/seff.XXXXXX)
 source <%= $source_path %>
 
-jobs=($(mysql -u ${username} -p${password} -D ${database} -e "select id_job from ${job_table} where time_end > UNIX_TIMESTAMP(now() - interval 1 hour) and exit_code = '0' and array_task_pending = '0'" | grep -v id_job))
+if [ -z "$password" ]
+then
+  # ASSUME NO PASSWORD NECESSARY, e.g. USING SOCKET
+  mysqlpass=""
+else
+  mysqlpass="-p${password}"
+fi
+
+jobs=($(mysql -u ${username} ${mysqlpass} -D ${database} -e "select id_job from ${job_table} where time_end > UNIX_TIMESTAMP(now() - interval 1 hour) and exit_code = '0' and array_task_pending = '0'" | grep -v id_job))
 
 for j in ${jobs[@]}
 do
