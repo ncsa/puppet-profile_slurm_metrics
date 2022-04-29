@@ -17,6 +17,7 @@
 #
 # @param slurm_password
 #   Password for the slurm user account
+#   Leave blank if using MySQL socket authentication
 #
 # @param slurm_path
 #   Path to slurm bin
@@ -33,16 +34,16 @@ class profile_slurm::telegraf::telegraf (
   String $script_path,
   String $slurm_database,
   String $slurm_job_table,
-  String $slurm_password,
   String $slurm_path,
   String $slurm_username,
+  Optional[String] $slurm_password='',
 ){
 
   if ($enable) {
     $ensure_parm = 'present'
 
-    if ($slurm_job_table.empty) or ($slurm_password.empty) {
-      fail('One or more of these required values is not set: slurm_job_table slurm_password ')
+    if ($slurm_job_table.empty) {
+      fail('This required value is not set: slurm_job_table')
     }
 
     ensure_packages( $required_pkgs )

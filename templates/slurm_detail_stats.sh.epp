@@ -5,6 +5,14 @@
 
 source <%= $source_path %>
 
+if [ -z "$password" ]
+then
+  # ASSUME NO PASSWORD NECESSARY, e.g. USING SOCKET
+  mysqlpass=""
+else
+  mysqlpass="-p${password}"
+fi
+
 ## Setup temp files and define path to slurm
 tfile=$(mktemp /tmp/slurm_node.XXXXXX)
 tfile2=$(mktemp /tmp/squeue.XXXXXX)
@@ -237,7 +245,7 @@ do
 done
 
 ## Job Time Pending Data
-mysql -u ${username} -p${password} -D ${database} -e "select id_user,\`partition\`,MAX(UNIX_TIMESTAMP(NOW())-time_submit) as "MAX_PENDING_TIME",AVG(UNIX_TIMESTAMP(NOW())-time_submit) as "AVG_PENDING_TIME" from ${job_table} where state = 'pending' group by \`partition\`,id_user;" | grep -v id_user > ${tfile}
+mysql -u ${username}  ${mysqlpass} -D ${database} -e "select id_user,\`partition\`,MAX(UNIX_TIMESTAMP(NOW())-time_submit) as "MAX_PENDING_TIME",AVG(UNIX_TIMESTAMP(NOW())-time_submit) as "AVG_PENDING_TIME" from ${job_table} where state = 'pending' group by \`partition\`,id_user;" | grep -v id_user > ${tfile}
 while read -r p; do
 	IFS=" " read id_user partition max_pending_time avg_pending_time <<< "$(echo ${p})"	
 	user=$(getent passwd ${id_user} | cut -d':' -f 1)
@@ -246,7 +254,7 @@ while read -r p; do
 	fi
 done < "${tfile}"
 
-mysql -u ${username} -p${password} -D ${database} -e "select id_group,\`partition\`,MAX(UNIX_TIMESTAMP(NOW())-time_submit) as "MAX_PENDING_TIME",AVG(UNIX_TIMESTAMP(NOW())-time_submit) as "AVG_PENDING_TIME" from ${job_table} where state = 'pending' group by \`partition\`,id_group;" | grep -v id_group > ${tfile}
+mysql -u ${username}  ${mysqlpass} -D ${database} -e "select id_group,\`partition\`,MAX(UNIX_TIMESTAMP(NOW())-time_submit) as "MAX_PENDING_TIME",AVG(UNIX_TIMESTAMP(NOW())-time_submit) as "AVG_PENDING_TIME" from ${job_table} where state = 'pending' group by \`partition\`,id_group;" | grep -v id_group > ${tfile}
 while read -r p; do
         IFS=" " read id_group partition max_pending_time avg_pending_time <<< "$(echo ${p})"
         groupname=$(getent group ${id_group} | cut -d':' -f 1)

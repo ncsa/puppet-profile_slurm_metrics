@@ -38,6 +38,6 @@ profile_slurm::telegraf::telegraf::required_pkgs:
 profile_slurm::telegraf::telegraf::script_path: "/etc/telegraf/scripts/slurm"
 profile_slurm::telegraf::telegraf::slurm_database: "slurm_acct_db"
 profile_slurm::telegraf::telegraf::slurm_job_table: ""
-profile_slurm::telegraf::telegraf::slurm_password: ""  # Needs to be setup as a VAULT lookup in your project control repo
+profile_slurm::telegraf::telegraf::slurm_password: ""  # Needs to be setup as a VAULT lookup in your project control repo OR can be empty if using socket auth
 profile_slurm::telegraf::telegraf::slurm_path: "/usr/bin"
 profile_slurm::telegraf::telegraf::slurm_username: "slurmdbd"
