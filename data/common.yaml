@@ -26,7 +26,7 @@ profile_slurm::telegraf::slurm_detail_stats::timeout: "2m"
 
 profile_slurm::telegraf::slurm_job_efficiency::enable: true
 profile_slurm::telegraf::slurm_job_efficiency::interval: "1h"
-profile_slurm::telegraf::slurm_job_efficiency::timeout: "10m"
+profile_slurm::telegraf::slurm_job_efficiency::timeout: "45m"
 
 profile_slurm::telegraf::slurm_stats::enable: true
 profile_slurm::telegraf::slurm_stats::interval: "1m"
