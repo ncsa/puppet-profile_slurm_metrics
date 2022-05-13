@@ -57,7 +57,7 @@ while read -r p; do
 			done
 		## Job uses a GPU(s) so run this
                 else
-			mem_len=$(echo "${p}" | cut -d'=' -f 3 | grep -o -E '[0-9]+' | head -1 | wc -c)
+                        mem_len=$(echo "${p}" | cut -d'=' -f 3 | sed 's/[^0-9\.]*//g' | wc -c) 
                         mem=$(echo "${p}" | cut -d'=' -f 3 | cut -c 1-"${mem_len}")
                         if [ "$(echo "${mem}" | rev | cut -c 1)" == "M" ]; then
                                 t_alloc=$(echo "${mem}" | cut -d'M' -f 1)
