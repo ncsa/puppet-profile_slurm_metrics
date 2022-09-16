@@ -15,6 +15,7 @@
 * [`profile_slurm::scheduler`](#profile_slurmscheduler): Sets up configs for scheduler node
 * [`profile_slurm::scheduler::firewall`](#profile_slurmschedulerfirewall): Setup firewall on slurm scheduler
 * [`profile_slurm::scheduler::storage`](#profile_slurmschedulerstorage)
+* [`profile_slurm::telegraf::slurm_accounting_stats`](#profile_slurmtelegrafslurm_accounting_stats): Configure the telegraf collection script slurm_accounting_stats
 * [`profile_slurm::telegraf::slurm_detail_stats`](#profile_slurmtelegrafslurm_detail_stats): Configure the telegraf collection script slurm_detail_stats
 * [`profile_slurm::telegraf::slurm_job_efficiency`](#profile_slurmtelegrafslurm_job_efficiency): Configure the telegraf collection script slurm_job_efficiency
 * [`profile_slurm::telegraf::slurm_stats`](#profile_slurmtelegrafslurm_stats): Configure the telegraf collection script slurm_stats
@@ -251,6 +252,44 @@ resources, e.g.:
 Data type: `Array[String]`
 
 
+
+### <a name="profile_slurmtelegrafslurm_accounting_stats"></a>`profile_slurm::telegraf::slurm_accounting_stats`
+
+Configure the telegraf collection script slurm_accounting_stats
+
+#### Examples
+
+##### 
+
+```puppet
+include profile_slurm::telegraf::slurm_accounting_stats
+```
+
+#### Parameters
+
+The following parameters are available in the `profile_slurm::telegraf::slurm_accounting_stats` class:
+
+* [`enable`](#enable)
+* [`interval`](#interval)
+* [`timeout`](#timeout)
+
+##### <a name="enable"></a>`enable`
+
+Data type: `Boolean`
+
+Enables the telegraf collection script slurm_accounting_stats
+
+##### <a name="interval"></a>`interval`
+
+Data type: `String`
+
+How often to run the slurm_accounting_stats telegraf script
+
+##### <a name="timeout"></a>`timeout`
+
+Data type: `String`
+
+Timeout for the slurm_accounting_stats telegraf script
 
 ### <a name="profile_slurmtelegrafslurm_detail_stats"></a>`profile_slurm::telegraf::slurm_detail_stats`
 
