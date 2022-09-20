@@ -15,7 +15,7 @@ else
 fi
 
 ## Get data into temp files for parsing
-mysql -u ${username} ${mysqlpass} -D ${database} -e "select id_user,account,\`partition\`,tres_req,(time_end - time_start), time_end, time_eligible, time_start from ${job_table} where time_end > UNIX_TIMESTAMP(now() - interval 2 hour) and exit_code = '0' and array_task_pending = '0'" | tail -n +2 | sed 's/\t/:/g' > ${tfile}
+mysql -u ${username} ${mysqlpass} -D ${database} -e "select id_user,account,\`partition\`,tres_req,(time_end - time_start), time_end, time_eligible, time_start from ${job_table} where time_end > UNIX_TIMESTAMP(now() - interval 1 hour) and array_task_pending = '0'" | tail -n +2 | sed 's/\t/:/g' > ${tfile}
 mysql -u ${username} ${mysqlpass} -D ${database} -e "select id,type,\`name\` from tres_table where deleted = '0'" | sed 's/\t/:/g' > ${tfile}.tres
 
 old_job_end=0
@@ -23,7 +23,7 @@ many_same=0
 id_user=""
 while IFS= read -r line; do
   resource_usage_string=""
-  IFS=":" read -r id_user account partition tres_raw job_time_seconds job_end_time <<< "${line}"
+  IFS=":" read -r id_user account partition tres_raw job_time_seconds job_end_time job_time_eligible job_start_time <<< "${line}"
 
   ## Map username
   if [ "${id_user}" != "${old_id_user}" ]; then
@@ -31,9 +31,9 @@ while IFS= read -r line; do
   fi
 
   ## Handle jobs with start time of 0
-        if [ ${job_start_time} -eq 0 ]; then
-                job_time_seconds=$((job_end_time-job_time_eligible))
-        fi
+  if [ ${job_start_time} -eq 0 ]; then
+    job_time_seconds=$((job_end_time-job_time_eligible))
+  fi
 
   ## Handle jobs that end at same exact second by incrementing their timestamp by 1 nanosecond
   njob_end_time="${job_end_time}000000000"
@@ -64,18 +64,18 @@ while IFS= read -r line; do
     else
       ## Is a GRES
       field=$(awk -F : -v id=${i} '$1 == id {print $3"_"$4}' ${tfile}.tres)
-                        field_value=$(echo ${tres_raw} | sed 's/,/\n/g' | awk -F = -v id=${i} '$1 == id {print $2}')
-                        field_seconds=$(echo "scale=5; ${field_value} * ${job_time_seconds}" | bc -l)
-                        resource_usage_string="$(echo ${resource_usage_string}),${field}_seconds=${field_seconds}"
+      field_value=$(echo ${tres_raw} | sed 's/,/\n/g' | awk -F = -v id=${i} '$1 == id {print $2}')
+      field_seconds=$(echo "scale=5; ${field_value} * ${job_time_seconds}" | bc -l)
+      resource_usage_string="$(echo ${resource_usage_string}),${field}_seconds=${field_seconds}"
     fi
   done
 
   ## Clean up the resource string and echo final output
   resource_usage_string=$(echo ${resource_usage_string} | cut -d',' -f 2- | sed 's/__/_/g')
   old_id_user=${id_user}
-        if [ -n "${partition}" ]; then
-                echo "slurm_job_accounting_data,partition=${partition},user=${pretty_id_user},account=${account} ${resource_usage_string} ${njob_end_time}"
-        fi
+  if [ -n "${partition}" ]; then
+    echo "slurm_job_accounting_data,partition=${partition},user=${pretty_id_user},account=${account} ${resource_usage_string} ${njob_end_time}"
+  fi
 done < <(cat "${tfile}")
 
 rm -rf "${tfile}" && rm -rf "${tfile}".tres
