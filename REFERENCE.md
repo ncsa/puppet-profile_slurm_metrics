@@ -11,6 +11,7 @@
 * [`profile_slurm::client::firewall`](#profile_slurmclientfirewall): Setup firewall on slurm client
 * [`profile_slurm::compute`](#profile_slurmcompute): Setup slurm config for slurm compute node
 * [`profile_slurm::compute::storage`](#profile_slurmcomputestorage): Setup underlying storage for slurm compute nodes
+* [`profile_slurm::crons`](#profile_slurmcrons): Manage Ad-hoc crons and related scripts.
 * [`profile_slurm::monitor`](#profile_slurmmonitor): Sets up monitoring and collecting of slurm scheduler stats
 * [`profile_slurm::scheduler`](#profile_slurmscheduler): Sets up configs for scheduler node
 * [`profile_slurm::scheduler::firewall`](#profile_slurmschedulerfirewall): Setup firewall on slurm scheduler
@@ -154,6 +155,37 @@ refreshed (removed and recreated). If this is NOT defined, and
 $tmpfs_dir IS defined, then Puppet will simply ensure that $tmpfs_dir
 exists.
 E.g.: "Lvm::Logical_volume['local']"
+
+### <a name="profile_slurmcrons"></a>`profile_slurm::crons`
+
+Manage Ad-hoc crons and related scripts.
+
+#### Examples
+
+##### 
+
+```puppet
+include profile_slurm::crons
+```
+
+#### Parameters
+
+The following parameters are available in the `profile_slurm::crons` class:
+
+* [`crons`](#crons)
+* [`files`](#files)
+
+##### <a name="crons"></a>`crons`
+
+Data type: `Hash`
+
+Cron resources.
+
+##### <a name="files"></a>`files`
+
+Data type: `Hash`
+
+File resources.
 
 ### <a name="profile_slurmmonitor"></a>`profile_slurm::monitor`
 
