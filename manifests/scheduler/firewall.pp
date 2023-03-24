@@ -15,10 +15,8 @@ class profile_slurm::scheduler::firewall (
   Integer        $slurmctld_port,
   Integer        $slurmdbd_port,
   Array[String]  $sources,
-){
-
-  $sources.each | $source |
-  {
+) {
+  $sources.each | $source | {
     firewall { "100 allow ${source} access to slurmctld":
       proto  => 'tcp',
       dport  => $slurmctld_port,
@@ -33,5 +31,4 @@ class profile_slurm::scheduler::firewall (
       action => 'accept',
     }
   }
-
 }

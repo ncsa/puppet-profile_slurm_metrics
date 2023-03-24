@@ -1,5 +1,15 @@
 ---
 
+anchors:
+  - &slurmrestd_group_name
+    "slurmrestd"
+  - &slurmrestd_port
+    6820
+  - &slurmrestd_user_home
+    "%{lookup('slurm::slurm_conf_override.StateSaveLocation')}"
+  - &slurmrestd_user_name
+    "slurmrestd"
+
 profile_slurm::client::firewall::slurmd_port: 6818
 profile_slurm::client::firewall::sources: []
 
@@ -23,6 +33,16 @@ profile_slurm::scheduler::storage::require_storage:
   - "Service['slurmdbd']"
 profile_slurm::scheduler::storage::storage_dependencies: []
 
+# note: there are no "official" IDs for slurmrestd, but
+# slurm is usually 93 and 94 doesn't seem to be widely used
+profile_slurm::slurmrestd::group_id: 94
+profile_slurm::slurmrestd::group_name: *slurmrestd_group_name
+profile_slurm::slurmrestd::firewall_port: *slurmrestd_port
+profile_slurm::slurmrestd::firewall_sources: []
+profile_slurm::slurmrestd::user_home: *slurmrestd_user_home
+profile_slurm::slurmrestd::user_id: 94
+profile_slurm::slurmrestd::user_name: *slurmrestd_user_name
+
 profile_slurm::telegraf::slurm_accounting_stats::enable: true
 profile_slurm::telegraf::slurm_accounting_stats::interval: "1h"
 profile_slurm::telegraf::slurm_accounting_stats::timeout: "30m"
@@ -45,6 +65,16 @@ profile_slurm::telegraf::telegraf::required_pkgs:
 profile_slurm::telegraf::telegraf::script_path: "/etc/telegraf/scripts/slurm"
 profile_slurm::telegraf::telegraf::slurm_database: "slurm_acct_db"
 profile_slurm::telegraf::telegraf::slurm_job_table: ""
-profile_slurm::telegraf::telegraf::slurm_password: ""  # Needs to be encrypted in your project control repo OR can be empty if using socket auth
+# Needs to be encrypted in your project control repo OR can be empty if using socket auth
+profile_slurm::telegraf::telegraf::slurm_password: ""
 profile_slurm::telegraf::telegraf::slurm_path: "/usr/bin"
 profile_slurm::telegraf::telegraf::slurm_username: "slurmdbd"
+
+slurm::slurmrestd_options: ""
+slurm::slurmrestd_port: *slurmrestd_port
+slurm::slurmrestd_restart_on_failure: true
+slurm::slurmrestd_service_enable: "running"
+slurm::slurmrestd_service_ensure: true
+slurm::slurmrestd_service_limits: {}
+slurm::slurmrestd_user: *slurmrestd_user_name
+slurm::slurmrestd_user_group: *slurmrestd_group_name

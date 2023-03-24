@@ -14,7 +14,6 @@ class profile_slurm::crons (
   Hash $crons,
   Hash $files,
 ) {
-
   $file_defaults = {
     ensure => file,
     owner  => 'root',
@@ -28,5 +27,4 @@ class profile_slurm::crons (
     user   => 'root',
   }
   ensure_resources('cron', $crons, $cron_defaults )
-
 }

@@ -39,14 +39,11 @@ class profile_slurm::compute::storage (
   Optional[String] $tmpfs_dir_refresh_command,
   Optional[String] $tmpfs_dir_refreshed_by,
 
-){
-
+) {
   # Make sure that underlying storage dependencies (mounts, etc.)
   # are ensured prior to things that depend on them (e.g., services).
-  $storage_dependencies.each | $dependency |
-  {
-    $require_storage.each | $dependent |
-    {
+  $storage_dependencies.each | $dependency | {
+    $require_storage.each | $dependent | {
       $dependency -> $dependent
     }
   }
@@ -81,10 +78,8 @@ class profile_slurm::compute::storage (
       mode   => '0755',
       owner  => 'root',
     }
-    $require_storage.each | $dependent |
-    {
+    $require_storage.each | $dependent | {
       File[$tmpfs_dir] -> $dependent
     }
   }
-
 }

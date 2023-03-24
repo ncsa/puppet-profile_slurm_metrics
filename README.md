@@ -26,37 +26,43 @@ Currently this module:
 ## Setup
 
 For a Slurm submit node (generally cluster login nodes):
-```
+```ruby
 include ::profile_slurm::client
 ```
 
 For a Slurm compute node:
-```
+```ruby
 include ::profile_slurm::client
 include ::profile_slurm::compute
 ```
 
 For a Slurm scheduler:
-```
+```ruby
 include ::profile_slurm::scheduler
 ```
 
 For a Slurm monitor node (Include this on the node that hosts the `slurmdb`):
-```
+```ruby
 include ::profile_slurm::monitor
 ```
 
+For a node with slurmrestd:
+```ruby
+include ::profile_slurm::slurmrestd
+```
+NOTE: This has NOT been tested on a standalone node, only on a scheduler.
+NOTE: Having slurmrestd to listen on the internet is not a great idea, and it's very bad if there is no web proxy in front of it for additional security. Configuration of such a proxy is not covered by this profile.
 
 ## Usage
 
 You will want to set these hiera variables for Slurm submit nodes (generally cluster login nodes):
-```
+```yaml
 profile_slurm::client::firewall::sources:
   - "192.168.0.0/24"  # Allow access to slurmd from 192.168.0.0/24 net
 ```
 
 You will generally want to manage the firewall as well as dependencies on local storage for Slurm compute nodes:
-```
+```yaml
 profile_slurm::client::firewall::sources:
   - "192.168.0.0/24"  # Allow access to slurmd from 192.168.0.0/24 net
 profile_slurm::compute::storage::storage_dependencies:
@@ -74,6 +80,28 @@ profile_slurm::scheduler::storage::storage_dependencies:
   - "Mount['/var/lib/mysql']"
   - "Mount['/var/log/slurm']"
   - "Mount['/var/spool/slurmctld.state']"
+```
+
+To set up slurmrestd on a scheduler, configure these Hiera variables:
+```yaml
+# common.yaml:
+## open up the firewall, if needed
+profile_slurm::slurmrestd::firewall_sources:
+  - "A.B.C.D/XX"  # cluster network
+slurm::auth_alt_types:
+  - auth/jwt
+## optional, but suggested to explicitly set this
+slurm::slurmrestd_disable_token_creation: false
+
+# role/slurm_scheduler.yaml:
+slurm::slurmrestd: true
+
+# <encrypted and stored in eyaml>:
+slurm::jwt_key_content: ...
+
+# node/<scheduler_hostname>.yaml:
+## suggested to restrict slurmrestd to the cluster network
+slurm::slurmrestd_listen_address: 172.31.2.8
 ```
 
 ### Telegraf Monitoring

@@ -16,6 +16,7 @@
 * [`profile_slurm::scheduler`](#profile_slurmscheduler): Sets up configs for scheduler node
 * [`profile_slurm::scheduler::firewall`](#profile_slurmschedulerfirewall): Setup firewall on slurm scheduler
 * [`profile_slurm::scheduler::storage`](#profile_slurmschedulerstorage)
+* [`profile_slurm::slurmrestd`](#profile_slurmslurmrestd): Configure slurmrestd service.
 * [`profile_slurm::telegraf::slurm_accounting_stats`](#profile_slurmtelegrafslurm_accounting_stats): Configure the telegraf collection script slurm_accounting_stats
 * [`profile_slurm::telegraf::slurm_detail_stats`](#profile_slurmtelegrafslurm_detail_stats): Configure the telegraf collection script slurm_detail_stats
 * [`profile_slurm::telegraf::slurm_job_efficiency`](#profile_slurmtelegrafslurm_job_efficiency): Configure the telegraf collection script slurm_job_efficiency
@@ -284,6 +285,72 @@ resources, e.g.:
 Data type: `Array[String]`
 
 
+
+### <a name="profile_slurmslurmrestd"></a>`profile_slurm::slurmrestd`
+
+Configure slurmrestd service.
+
+#### Examples
+
+##### 
+
+```puppet
+include profile_slurm::slurmrestd
+```
+
+#### Parameters
+
+The following parameters are available in the `profile_slurm::slurmrestd` class:
+
+* [`group_id`](#group_id)
+* [`group_name`](#group_name)
+* [`firewall_port`](#firewall_port)
+* [`firewall_sources`](#firewall_sources)
+* [`user_home`](#user_home)
+* [`user_id`](#user_id)
+* [`user_name`](#user_name)
+
+##### <a name="group_id"></a>`group_id`
+
+Data type: `Integer`
+
+GID of the slurmrestd group.
+
+##### <a name="group_name"></a>`group_name`
+
+Data type: `String`
+
+Name of the group for the slurmrestd service account.
+
+##### <a name="firewall_port"></a>`firewall_port`
+
+Data type: `Integer`
+
+Port number for slurmrestd.
+
+##### <a name="firewall_sources"></a>`firewall_sources`
+
+Data type: `Array`
+
+List of CIDRs to allow (can be empty).
+
+##### <a name="user_home"></a>`user_home`
+
+Data type: `String`
+
+Home dir of the slurmrestd service account.
+
+##### <a name="user_id"></a>`user_id`
+
+Data type: `Integer`
+
+UID of the slurmrestd service account.
+
+##### <a name="user_name"></a>`user_name`
+
+Data type: `String`
+
+Name of the slurmrestd service account.
 
 ### <a name="profile_slurmtelegrafslurm_accounting_stats"></a>`profile_slurm::telegraf::slurm_accounting_stats`
 

@@ -37,8 +37,7 @@ class profile_slurm::telegraf::telegraf (
   String $slurm_path,
   String $slurm_username,
   Optional[String] $slurm_password='',
-){
-
+) {
   if ($enable) {
     $ensure_parm = 'present'
 
@@ -47,7 +46,6 @@ class profile_slurm::telegraf::telegraf (
     }
 
     ensure_packages( $required_pkgs )
-
   } else {
     $ensure_parm = 'absent'
   }
@@ -74,5 +72,4 @@ class profile_slurm::telegraf::telegraf (
     group   => 'telegraf',
     mode    => '0740',
   }
-
 }

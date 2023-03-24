@@ -11,10 +11,8 @@
 class profile_slurm::client::firewall (
   Integer        $slurmd_port,
   Array[String]  $sources,
-){
-
-  $sources.each | $source |
-  {
+) {
+  $sources.each | $source | {
     firewall { "100 allow ${source} access to slurmd":
       proto  => 'tcp',
       dport  => $slurmd_port,
@@ -22,5 +20,4 @@ class profile_slurm::client::firewall (
       action => 'accept',
     }
   }
-
 }

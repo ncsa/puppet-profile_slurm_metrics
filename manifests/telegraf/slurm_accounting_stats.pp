@@ -15,8 +15,7 @@ class profile_slurm::telegraf::slurm_accounting_stats (
   Boolean $enable,
   String $interval,
   String $timeout,
-){
-
+) {
   $script_base_name = 'slurm_accounting_stats'
   $script_path = lookup("${module_name}::telegraf::telegraf::script_path")
   $slurm_telegraf_enabled = lookup("${module_name}::telegraf::telegraf::enable")
@@ -53,5 +52,4 @@ class profile_slurm::telegraf::slurm_accounting_stats (
     group   => 'telegraf',
     notify  => Service['telegraf'],
   }
-
 }

@@ -19,16 +19,12 @@ class profile_slurm::scheduler::storage (
   Array[String]  $require_storage,
   Array[String]  $storage_dependencies,
 
-){
-
-  $storage_dependencies.each | $dependency |
-  {
-    $require_storage.each | $dependent |
-    {
+) {
+  $storage_dependencies.each | $dependency | {
+    $require_storage.each | $dependent | {
 #    $mount -> Service['slurmctld']
 #    $mount -> Service['slurmdbd']
       $dependency -> $dependent
     }
   }
-
 }
