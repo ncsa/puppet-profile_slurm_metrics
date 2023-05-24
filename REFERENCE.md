@@ -7,21 +7,22 @@
 ### Classes
 
 * [`profile_slurm`](#profile_slurm): Blank init, profiles should include other classes in this module
-* [`profile_slurm::client`](#profile_slurmclient): Setup slurm config for slurm client
-* [`profile_slurm::client::firewall`](#profile_slurmclientfirewall): Setup firewall on slurm client
-* [`profile_slurm::compute`](#profile_slurmcompute): Setup slurm config for slurm compute node
-* [`profile_slurm::compute::storage`](#profile_slurmcomputestorage): Setup underlying storage for slurm compute nodes
-* [`profile_slurm::crons`](#profile_slurmcrons): Manage Ad-hoc crons and related scripts.
-* [`profile_slurm::monitor`](#profile_slurmmonitor): Sets up monitoring and collecting of slurm scheduler stats
-* [`profile_slurm::scheduler`](#profile_slurmscheduler): Sets up configs for scheduler node
-* [`profile_slurm::scheduler::firewall`](#profile_slurmschedulerfirewall): Setup firewall on slurm scheduler
-* [`profile_slurm::scheduler::storage`](#profile_slurmschedulerstorage)
-* [`profile_slurm::slurmrestd`](#profile_slurmslurmrestd): Configure slurmrestd service.
-* [`profile_slurm::telegraf::slurm_accounting_stats`](#profile_slurmtelegrafslurm_accounting_stats): Configure the telegraf collection script slurm_accounting_stats
-* [`profile_slurm::telegraf::slurm_detail_stats`](#profile_slurmtelegrafslurm_detail_stats): Configure the telegraf collection script slurm_detail_stats
-* [`profile_slurm::telegraf::slurm_job_efficiency`](#profile_slurmtelegrafslurm_job_efficiency): Configure the telegraf collection script slurm_job_efficiency
-* [`profile_slurm::telegraf::slurm_stats`](#profile_slurmtelegrafslurm_stats): Configure the telegraf collection script slurm_stats
-* [`profile_slurm::telegraf::telegraf`](#profile_slurmtelegraftelegraf): Sets up requirements for all telegraf checks
+* [`profile_slurm::client`](#profile_slurm--client): Setup slurm config for slurm client
+* [`profile_slurm::client::firewall`](#profile_slurm--client--firewall): Setup firewall on slurm client
+* [`profile_slurm::compute`](#profile_slurm--compute): Setup slurm config for slurm compute node
+* [`profile_slurm::compute::storage`](#profile_slurm--compute--storage): Setup underlying storage for slurm compute nodes
+* [`profile_slurm::crons`](#profile_slurm--crons): Manage Ad-hoc crons and related scripts.
+* [`profile_slurm::files`](#profile_slurm--files): Support installation of arbitrary files.
+* [`profile_slurm::monitor`](#profile_slurm--monitor): Sets up monitoring and collecting of slurm scheduler stats
+* [`profile_slurm::scheduler`](#profile_slurm--scheduler): Sets up configs for scheduler node
+* [`profile_slurm::scheduler::firewall`](#profile_slurm--scheduler--firewall): Setup firewall on slurm scheduler
+* [`profile_slurm::scheduler::storage`](#profile_slurm--scheduler--storage)
+* [`profile_slurm::slurmrestd`](#profile_slurm--slurmrestd): Configure slurmrestd service.
+* [`profile_slurm::telegraf::slurm_accounting_stats`](#profile_slurm--telegraf--slurm_accounting_stats): Configure the telegraf collection script slurm_accounting_stats
+* [`profile_slurm::telegraf::slurm_detail_stats`](#profile_slurm--telegraf--slurm_detail_stats): Configure the telegraf collection script slurm_detail_stats
+* [`profile_slurm::telegraf::slurm_job_efficiency`](#profile_slurm--telegraf--slurm_job_efficiency): Configure the telegraf collection script slurm_job_efficiency
+* [`profile_slurm::telegraf::slurm_stats`](#profile_slurm--telegraf--slurm_stats): Configure the telegraf collection script slurm_stats
+* [`profile_slurm::telegraf::telegraf`](#profile_slurm--telegraf--telegraf): Sets up requirements for all telegraf checks
 
 ## Classes
 
@@ -37,7 +38,7 @@ Blank init, profiles should include other classes in this module
 include profile_slurm
 ```
 
-### <a name="profile_slurmclient"></a>`profile_slurm::client`
+### <a name="profile_slurm--client"></a>`profile_slurm::client`
 
 Setup slurm config for slurm client
 
@@ -49,7 +50,7 @@ Setup slurm config for slurm client
 include profile_slurm::client
 ```
 
-### <a name="profile_slurmclientfirewall"></a>`profile_slurm::client::firewall`
+### <a name="profile_slurm--client--firewall"></a>`profile_slurm::client::firewall`
 
 Setup firewall on slurm client
 
@@ -65,22 +66,22 @@ include profile_slurm::client::firewall
 
 The following parameters are available in the `profile_slurm::client::firewall` class:
 
-* [`slurmd_port`](#slurmd_port)
-* [`sources`](#sources)
+* [`slurmd_port`](#-profile_slurm--client--firewall--slurmd_port)
+* [`sources`](#-profile_slurm--client--firewall--sources)
 
-##### <a name="slurmd_port"></a>`slurmd_port`
+##### <a name="-profile_slurm--client--firewall--slurmd_port"></a>`slurmd_port`
 
 Data type: `Integer`
 
 Destination ports that need to be open for the slurmd service
 
-##### <a name="sources"></a>`sources`
+##### <a name="-profile_slurm--client--firewall--sources"></a>`sources`
 
 Data type: `Array[String]`
 
 Array of CIDRs that need to be open for the slurmd service
 
-### <a name="profile_slurmcompute"></a>`profile_slurm::compute`
+### <a name="profile_slurm--compute"></a>`profile_slurm::compute`
 
 Setup slurm config for slurm compute node
 
@@ -92,7 +93,7 @@ Setup slurm config for slurm compute node
 include profile_slurm::compute
 ```
 
-### <a name="profile_slurmcomputestorage"></a>`profile_slurm::compute::storage`
+### <a name="profile_slurm--compute--storage"></a>`profile_slurm::compute::storage`
 
 Setup underlying storage for slurm compute nodes
 
@@ -108,20 +109,20 @@ include profile_slurm::scheduler::storage
 
 The following parameters are available in the `profile_slurm::compute::storage` class:
 
-* [`require_storage`](#require_storage)
-* [`storage_dependencies`](#storage_dependencies)
-* [`tmpfs_dir`](#tmpfs_dir)
-* [`tmpfs_dir_refresh_command`](#tmpfs_dir_refresh_command)
-* [`tmpfs_dir_refreshed_by`](#tmpfs_dir_refreshed_by)
+* [`require_storage`](#-profile_slurm--compute--storage--require_storage)
+* [`storage_dependencies`](#-profile_slurm--compute--storage--storage_dependencies)
+* [`tmpfs_dir`](#-profile_slurm--compute--storage--tmpfs_dir)
+* [`tmpfs_dir_refresh_command`](#-profile_slurm--compute--storage--tmpfs_dir_refresh_command)
+* [`tmpfs_dir_refreshed_by`](#-profile_slurm--compute--storage--tmpfs_dir_refreshed_by)
 
-##### <a name="require_storage"></a>`require_storage`
+##### <a name="-profile_slurm--compute--storage--require_storage"></a>`require_storage`
 
 Data type: `Array[String]`
 
 Optionally list resources (e.g., services) that require storage
 in order to function.
 
-##### <a name="storage_dependencies"></a>`storage_dependencies`
+##### <a name="-profile_slurm--compute--storage--storage_dependencies"></a>`storage_dependencies`
 
 Data type: `Array[String]`
 
@@ -131,7 +132,7 @@ be specified as a requirement ("before") various Slurm compute (slurmd)
 resources, e.g.:
   - "Lvm::Logical_volume::local"
 
-##### <a name="tmpfs_dir"></a>`tmpfs_dir`
+##### <a name="-profile_slurm--compute--storage--tmpfs_dir"></a>`tmpfs_dir`
 
 Data type: `Optional[String]`
 
@@ -140,14 +141,14 @@ Created by File resource or Exec depending on value of
 $tmpfs_dir_refeshed_by.
 E.g.: "/local/slurmjobs"
 
-##### <a name="tmpfs_dir_refresh_command"></a>`tmpfs_dir_refresh_command`
+##### <a name="-profile_slurm--compute--storage--tmpfs_dir_refresh_command"></a>`tmpfs_dir_refresh_command`
 
 Data type: `Optional[String]`
 
 Optional command that should refresh $tmpfs_dir. If not specified,
 then "rm -rf ${tmpfs_dir}" will be used.
 
-##### <a name="tmpfs_dir_refreshed_by"></a>`tmpfs_dir_refreshed_by`
+##### <a name="-profile_slurm--compute--storage--tmpfs_dir_refreshed_by"></a>`tmpfs_dir_refreshed_by`
 
 Data type: `Optional[String]`
 
@@ -157,7 +158,7 @@ $tmpfs_dir IS defined, then Puppet will simply ensure that $tmpfs_dir
 exists.
 E.g.: "Lvm::Logical_volume['local']"
 
-### <a name="profile_slurmcrons"></a>`profile_slurm::crons`
+### <a name="profile_slurm--crons"></a>`profile_slurm::crons`
 
 Manage Ad-hoc crons and related scripts.
 
@@ -173,22 +174,39 @@ include profile_slurm::crons
 
 The following parameters are available in the `profile_slurm::crons` class:
 
-* [`crons`](#crons)
-* [`files`](#files)
+* [`crons`](#-profile_slurm--crons--crons)
 
-##### <a name="crons"></a>`crons`
+##### <a name="-profile_slurm--crons--crons"></a>`crons`
 
 Data type: `Hash`
 
 Cron resources.
 
-##### <a name="files"></a>`files`
+### <a name="profile_slurm--files"></a>`profile_slurm::files`
+
+Support installation of arbitrary files.
+
+#### Examples
+
+##### 
+
+```puppet
+include profile_slurm::files
+```
+
+#### Parameters
+
+The following parameters are available in the `profile_slurm::files` class:
+
+* [`files`](#-profile_slurm--files--files)
+
+##### <a name="-profile_slurm--files--files"></a>`files`
 
 Data type: `Hash`
 
 File resources.
 
-### <a name="profile_slurmmonitor"></a>`profile_slurm::monitor`
+### <a name="profile_slurm--monitor"></a>`profile_slurm::monitor`
 
 Sets up monitoring and collecting of slurm scheduler stats
 
@@ -200,7 +218,7 @@ Sets up monitoring and collecting of slurm scheduler stats
 include profile_slurm::monitor
 ```
 
-### <a name="profile_slurmscheduler"></a>`profile_slurm::scheduler`
+### <a name="profile_slurm--scheduler"></a>`profile_slurm::scheduler`
 
 Sets up configs for scheduler node
 
@@ -212,7 +230,7 @@ Sets up configs for scheduler node
 include profile_slurm::scheduler
 ```
 
-### <a name="profile_slurmschedulerfirewall"></a>`profile_slurm::scheduler::firewall`
+### <a name="profile_slurm--scheduler--firewall"></a>`profile_slurm::scheduler::firewall`
 
 Setup firewall on slurm scheduler
 
@@ -228,29 +246,29 @@ include profile_slurm::scheduler::firewall
 
 The following parameters are available in the `profile_slurm::scheduler::firewall` class:
 
-* [`slurmctld_port`](#slurmctld_port)
-* [`slurmdbd_port`](#slurmdbd_port)
-* [`sources`](#sources)
+* [`slurmctld_port`](#-profile_slurm--scheduler--firewall--slurmctld_port)
+* [`slurmdbd_port`](#-profile_slurm--scheduler--firewall--slurmdbd_port)
+* [`sources`](#-profile_slurm--scheduler--firewall--sources)
 
-##### <a name="slurmctld_port"></a>`slurmctld_port`
+##### <a name="-profile_slurm--scheduler--firewall--slurmctld_port"></a>`slurmctld_port`
 
 Data type: `Integer`
 
 Destination port that need to be open for the slurmctld service
 
-##### <a name="slurmdbd_port"></a>`slurmdbd_port`
+##### <a name="-profile_slurm--scheduler--firewall--slurmdbd_port"></a>`slurmdbd_port`
 
 Data type: `Integer`
 
 Destination port that need to be open for the slurmdbd service
 
-##### <a name="sources"></a>`sources`
+##### <a name="-profile_slurm--scheduler--firewall--sources"></a>`sources`
 
 Data type: `Array[String]`
 
 Array of CIDRs that need to be open for the slurmctld and slurmdbd service
 
-### <a name="profile_slurmschedulerstorage"></a>`profile_slurm::scheduler::storage`
+### <a name="profile_slurm--scheduler--storage"></a>`profile_slurm::scheduler::storage`
 
 The profile_slurm::scheduler::storage class.
 
@@ -266,10 +284,10 @@ include profile_slurm::scheduler::storage
 
 The following parameters are available in the `profile_slurm::scheduler::storage` class:
 
-* [`storage_dependencies`](#storage_dependencies)
-* [`require_storage`](#require_storage)
+* [`storage_dependencies`](#-profile_slurm--scheduler--storage--storage_dependencies)
+* [`require_storage`](#-profile_slurm--scheduler--storage--require_storage)
 
-##### <a name="storage_dependencies"></a>`storage_dependencies`
+##### <a name="-profile_slurm--scheduler--storage--storage_dependencies"></a>`storage_dependencies`
 
 Data type: `Array[String]`
 
@@ -280,13 +298,13 @@ resources, e.g.:
   Lvm::Logical_volume::mysql
   Lvm::Logical_volume::slurm
 
-##### <a name="require_storage"></a>`require_storage`
+##### <a name="-profile_slurm--scheduler--storage--require_storage"></a>`require_storage`
 
 Data type: `Array[String]`
 
 
 
-### <a name="profile_slurmslurmrestd"></a>`profile_slurm::slurmrestd`
+### <a name="profile_slurm--slurmrestd"></a>`profile_slurm::slurmrestd`
 
 Configure slurmrestd service.
 
@@ -302,57 +320,57 @@ include profile_slurm::slurmrestd
 
 The following parameters are available in the `profile_slurm::slurmrestd` class:
 
-* [`group_id`](#group_id)
-* [`group_name`](#group_name)
-* [`firewall_port`](#firewall_port)
-* [`firewall_sources`](#firewall_sources)
-* [`user_home`](#user_home)
-* [`user_id`](#user_id)
-* [`user_name`](#user_name)
+* [`group_id`](#-profile_slurm--slurmrestd--group_id)
+* [`group_name`](#-profile_slurm--slurmrestd--group_name)
+* [`firewall_port`](#-profile_slurm--slurmrestd--firewall_port)
+* [`firewall_sources`](#-profile_slurm--slurmrestd--firewall_sources)
+* [`user_home`](#-profile_slurm--slurmrestd--user_home)
+* [`user_id`](#-profile_slurm--slurmrestd--user_id)
+* [`user_name`](#-profile_slurm--slurmrestd--user_name)
 
-##### <a name="group_id"></a>`group_id`
+##### <a name="-profile_slurm--slurmrestd--group_id"></a>`group_id`
 
 Data type: `Integer`
 
 GID of the slurmrestd group.
 
-##### <a name="group_name"></a>`group_name`
+##### <a name="-profile_slurm--slurmrestd--group_name"></a>`group_name`
 
 Data type: `String`
 
 Name of the group for the slurmrestd service account.
 
-##### <a name="firewall_port"></a>`firewall_port`
+##### <a name="-profile_slurm--slurmrestd--firewall_port"></a>`firewall_port`
 
 Data type: `Integer`
 
 Port number for slurmrestd.
 
-##### <a name="firewall_sources"></a>`firewall_sources`
+##### <a name="-profile_slurm--slurmrestd--firewall_sources"></a>`firewall_sources`
 
 Data type: `Array`
 
 List of CIDRs to allow (can be empty).
 
-##### <a name="user_home"></a>`user_home`
+##### <a name="-profile_slurm--slurmrestd--user_home"></a>`user_home`
 
 Data type: `String`
 
 Home dir of the slurmrestd service account.
 
-##### <a name="user_id"></a>`user_id`
+##### <a name="-profile_slurm--slurmrestd--user_id"></a>`user_id`
 
 Data type: `Integer`
 
 UID of the slurmrestd service account.
 
-##### <a name="user_name"></a>`user_name`
+##### <a name="-profile_slurm--slurmrestd--user_name"></a>`user_name`
 
 Data type: `String`
 
 Name of the slurmrestd service account.
 
-### <a name="profile_slurmtelegrafslurm_accounting_stats"></a>`profile_slurm::telegraf::slurm_accounting_stats`
+### <a name="profile_slurm--telegraf--slurm_accounting_stats"></a>`profile_slurm::telegraf::slurm_accounting_stats`
 
 Configure the telegraf collection script slurm_accounting_stats
 
@@ -368,29 +386,29 @@ include profile_slurm::telegraf::slurm_accounting_stats
 
 The following parameters are available in the `profile_slurm::telegraf::slurm_accounting_stats` class:
 
-* [`enable`](#enable)
-* [`interval`](#interval)
-* [`timeout`](#timeout)
+* [`enable`](#-profile_slurm--telegraf--slurm_accounting_stats--enable)
+* [`interval`](#-profile_slurm--telegraf--slurm_accounting_stats--interval)
+* [`timeout`](#-profile_slurm--telegraf--slurm_accounting_stats--timeout)
 
-##### <a name="enable"></a>`enable`
+##### <a name="-profile_slurm--telegraf--slurm_accounting_stats--enable"></a>`enable`
 
 Data type: `Boolean`
 
 Enables the telegraf collection script slurm_accounting_stats
 
-##### <a name="interval"></a>`interval`
+##### <a name="-profile_slurm--telegraf--slurm_accounting_stats--interval"></a>`interval`
 
 Data type: `String`
 
 How often to run the slurm_accounting_stats telegraf script
 
-##### <a name="timeout"></a>`timeout`
+##### <a name="-profile_slurm--telegraf--slurm_accounting_stats--timeout"></a>`timeout`
 
 Data type: `String`
 
 Timeout for the slurm_accounting_stats telegraf script
 
-### <a name="profile_slurmtelegrafslurm_detail_stats"></a>`profile_slurm::telegraf::slurm_detail_stats`
+### <a name="profile_slurm--telegraf--slurm_detail_stats"></a>`profile_slurm::telegraf::slurm_detail_stats`
 
 Configure the telegraf collection script slurm_detail_stats
 
@@ -406,29 +424,29 @@ include profile_slurm::telegraf::slurm_detail_stats
 
 The following parameters are available in the `profile_slurm::telegraf::slurm_detail_stats` class:
 
-* [`enable`](#enable)
-* [`interval`](#interval)
-* [`timeout`](#timeout)
+* [`enable`](#-profile_slurm--telegraf--slurm_detail_stats--enable)
+* [`interval`](#-profile_slurm--telegraf--slurm_detail_stats--interval)
+* [`timeout`](#-profile_slurm--telegraf--slurm_detail_stats--timeout)
 
-##### <a name="enable"></a>`enable`
+##### <a name="-profile_slurm--telegraf--slurm_detail_stats--enable"></a>`enable`
 
 Data type: `Boolean`
 
 Enables the telegraf collection script slurm_detail_stats
 
-##### <a name="interval"></a>`interval`
+##### <a name="-profile_slurm--telegraf--slurm_detail_stats--interval"></a>`interval`
 
 Data type: `String`
 
 How often to run the slurm_detail_stats telegraf script
 
-##### <a name="timeout"></a>`timeout`
+##### <a name="-profile_slurm--telegraf--slurm_detail_stats--timeout"></a>`timeout`
 
 Data type: `String`
 
 Timeout for the slurm_detail_stats telegraf script
 
-### <a name="profile_slurmtelegrafslurm_job_efficiency"></a>`profile_slurm::telegraf::slurm_job_efficiency`
+### <a name="profile_slurm--telegraf--slurm_job_efficiency"></a>`profile_slurm::telegraf::slurm_job_efficiency`
 
 Configure the telegraf collection script slurm_job_efficiency
 
@@ -444,29 +462,29 @@ include profile_slurm::telegraf::slurm_job_efficiency
 
 The following parameters are available in the `profile_slurm::telegraf::slurm_job_efficiency` class:
 
-* [`enable`](#enable)
-* [`interval`](#interval)
-* [`timeout`](#timeout)
+* [`enable`](#-profile_slurm--telegraf--slurm_job_efficiency--enable)
+* [`interval`](#-profile_slurm--telegraf--slurm_job_efficiency--interval)
+* [`timeout`](#-profile_slurm--telegraf--slurm_job_efficiency--timeout)
 
-##### <a name="enable"></a>`enable`
+##### <a name="-profile_slurm--telegraf--slurm_job_efficiency--enable"></a>`enable`
 
 Data type: `Boolean`
 
 Enables the telegraf collection script slurm_job_efficiency
 
-##### <a name="interval"></a>`interval`
+##### <a name="-profile_slurm--telegraf--slurm_job_efficiency--interval"></a>`interval`
 
 Data type: `String`
 
 How often to run the slurm_job_efficiency telegraf script
 
-##### <a name="timeout"></a>`timeout`
+##### <a name="-profile_slurm--telegraf--slurm_job_efficiency--timeout"></a>`timeout`
 
 Data type: `String`
 
 Timeout for the slurm_job_efficiency telegraf script
 
-### <a name="profile_slurmtelegrafslurm_stats"></a>`profile_slurm::telegraf::slurm_stats`
+### <a name="profile_slurm--telegraf--slurm_stats"></a>`profile_slurm::telegraf::slurm_stats`
 
 Configure the telegraf collection script slurm_stats
 
@@ -482,29 +500,29 @@ include profile_slurm::telegraf::slurm_stats
 
 The following parameters are available in the `profile_slurm::telegraf::slurm_stats` class:
 
-* [`enable`](#enable)
-* [`interval`](#interval)
-* [`timeout`](#timeout)
+* [`enable`](#-profile_slurm--telegraf--slurm_stats--enable)
+* [`interval`](#-profile_slurm--telegraf--slurm_stats--interval)
+* [`timeout`](#-profile_slurm--telegraf--slurm_stats--timeout)
 
-##### <a name="enable"></a>`enable`
+##### <a name="-profile_slurm--telegraf--slurm_stats--enable"></a>`enable`
 
 Data type: `Boolean`
 
 Enables the telegraf collection script slurm_stats
 
-##### <a name="interval"></a>`interval`
+##### <a name="-profile_slurm--telegraf--slurm_stats--interval"></a>`interval`
 
 Data type: `String`
 
 How often to run the slurm_stats telegraf script
 
-##### <a name="timeout"></a>`timeout`
+##### <a name="-profile_slurm--telegraf--slurm_stats--timeout"></a>`timeout`
 
 Data type: `String`
 
 Timeout for the slurm_stats telegraf script
 
-### <a name="profile_slurmtelegraftelegraf"></a>`profile_slurm::telegraf::telegraf`
+### <a name="profile_slurm--telegraf--telegraf"></a>`profile_slurm::telegraf::telegraf`
 
 Sets up requirements for all telegraf checks
 
@@ -520,46 +538,46 @@ include profile_slurm::telegraf::telegraf
 
 The following parameters are available in the `profile_slurm::telegraf::telegraf` class:
 
-* [`enable`](#enable)
-* [`required_pkgs`](#required_pkgs)
-* [`script_path`](#script_path)
-* [`slurm_database`](#slurm_database)
-* [`slurm_job_table`](#slurm_job_table)
-* [`slurm_password`](#slurm_password)
-* [`slurm_path`](#slurm_path)
-* [`slurm_username`](#slurm_username)
+* [`enable`](#-profile_slurm--telegraf--telegraf--enable)
+* [`required_pkgs`](#-profile_slurm--telegraf--telegraf--required_pkgs)
+* [`script_path`](#-profile_slurm--telegraf--telegraf--script_path)
+* [`slurm_database`](#-profile_slurm--telegraf--telegraf--slurm_database)
+* [`slurm_job_table`](#-profile_slurm--telegraf--telegraf--slurm_job_table)
+* [`slurm_password`](#-profile_slurm--telegraf--telegraf--slurm_password)
+* [`slurm_path`](#-profile_slurm--telegraf--telegraf--slurm_path)
+* [`slurm_username`](#-profile_slurm--telegraf--telegraf--slurm_username)
 
-##### <a name="enable"></a>`enable`
+##### <a name="-profile_slurm--telegraf--telegraf--enable"></a>`enable`
 
 Data type: `Boolean`
 
 Used to enable or disable all slurm telegraf checks
 
-##### <a name="required_pkgs"></a>`required_pkgs`
+##### <a name="-profile_slurm--telegraf--telegraf--required_pkgs"></a>`required_pkgs`
 
 Data type: `Array[String]`
 
 String array of packages required for telegraf checks
 
-##### <a name="script_path"></a>`script_path`
+##### <a name="-profile_slurm--telegraf--telegraf--script_path"></a>`script_path`
 
 Data type: `String`
 
 Path where telegraf scripts and supporting config files will go
 
-##### <a name="slurm_database"></a>`slurm_database`
+##### <a name="-profile_slurm--telegraf--telegraf--slurm_database"></a>`slurm_database`
 
 Data type: `String`
 
 Slurm database to query
 
-##### <a name="slurm_job_table"></a>`slurm_job_table`
+##### <a name="-profile_slurm--telegraf--telegraf--slurm_job_table"></a>`slurm_job_table`
 
 Data type: `String`
 
 Slurm job table to query
 
-##### <a name="slurm_password"></a>`slurm_password`
+##### <a name="-profile_slurm--telegraf--telegraf--slurm_password"></a>`slurm_password`
 
 Data type: `Optional[String]`
 
@@ -568,13 +586,13 @@ Leave blank if using MySQL socket authentication
 
 Default value: `''`
 
-##### <a name="slurm_path"></a>`slurm_path`
+##### <a name="-profile_slurm--telegraf--telegraf--slurm_path"></a>`slurm_path`
 
 Data type: `String`
 
 Path to slurm bin
 
-##### <a name="slurm_username"></a>`slurm_username`
+##### <a name="-profile_slurm--telegraf--telegraf--slurm_username"></a>`slurm_username`
 
 Data type: `String`
 
