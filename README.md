@@ -104,6 +104,12 @@ slurm::jwt_key_content: ...
 slurm::slurmrestd_listen_address: 172.31.2.8
 ```
 
+To install arbitrary files and symlinks, set this Hiera variable:
+```yaml
+profile_slurm::files::file: {}
+
+```
+
 ### Telegraf Monitoring
 
 You will want to set these hiera variables for a node running the telegraf monitoring:

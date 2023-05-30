@@ -21,7 +21,8 @@ profile_slurm::compute::storage::tmpfs_dir_refresh_command: null
 profile_slurm::compute::storage::tmpfs_dir_refreshed_by: null
 
 profile_slurm::crons::crons: {}
-profile_slurm::crons::files: {}
+
+profile_slurm::files::files: {}
 
 profile_slurm::scheduler::firewall::slurmdbd_port: 6819
 profile_slurm::scheduler::firewall::slurmctld_port: 6817
