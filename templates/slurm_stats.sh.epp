@@ -34,8 +34,8 @@ percent_max=$(echo "${total_jobs} / ${max_jobs} *100" | bc -l)
 echo "slurm_jobsumdata,partition=all,type=running count=${running_jobs}"
 echo "slurm_jobsumdata,partition=all,type=pending count=${pending_jobs}"
 echo "slurm_jobsumdata,partition=all,type=total count=${total_jobs}"
-echo "slurm_jobsumdata,partition=all type=max_jobs count=${max_jobs}"
-echo "slurm_jobsumdata,partition=all type=percent_of_max_jobs count=${percent_max}"
+echo "slurm_jobsumdata,partition=all,type=max_jobs count=${max_jobs}"
+echo "slurm_jobsumdata,partition=all,type=percent_of_max_jobs count=${percent_max}"
 
 pend_line="slurm_jobsumdata,partition=all,type=pendingbyreason "
 found_pending=0
