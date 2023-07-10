@@ -15,6 +15,7 @@
 * [`profile_slurm::files`](#profile_slurm--files): Support installation of arbitrary files.
 * [`profile_slurm::monitor`](#profile_slurm--monitor): Sets up monitoring and collecting of slurm scheduler stats
 * [`profile_slurm::scheduler`](#profile_slurm--scheduler): Sets up configs for scheduler node
+* [`profile_slurm::scheduler::backup`](#profile_slurm--scheduler--backup): Add a backup job to backup slurm data.
 * [`profile_slurm::scheduler::firewall`](#profile_slurm--scheduler--firewall): Setup firewall on slurm scheduler
 * [`profile_slurm::scheduler::storage`](#profile_slurm--scheduler--storage)
 * [`profile_slurm::slurmrestd`](#profile_slurm--slurmrestd): Configure slurmrestd service.
@@ -229,6 +230,22 @@ Sets up configs for scheduler node
 ```puppet
 include profile_slurm::scheduler
 ```
+
+### <a name="profile_slurm--scheduler--backup"></a>`profile_slurm::scheduler::backup`
+
+slurmdbd should be backed up via the mysql profile
+
+#### Parameters
+
+The following parameters are available in the `profile_slurm::scheduler::backup` class:
+
+* [`locations`](#-profile_slurm--scheduler--backup--locations)
+
+##### <a name="-profile_slurm--scheduler--backup--locations"></a>`locations`
+
+Data type: `Array[String]`
+
+files and directories that are to be backed up.
 
 ### <a name="profile_slurm--scheduler--firewall"></a>`profile_slurm::scheduler::firewall`
 
