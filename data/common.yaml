@@ -24,6 +24,10 @@ profile_slurm::crons::crons: {}
 
 profile_slurm::files::files: {}
 
+profile_slurm::scheduler::backup::locations:
+  - "/var/spool/slurmctld.state"
+  - "/var/log/slurm"
+
 profile_slurm::scheduler::firewall::slurmdbd_port: 6819
 profile_slurm::scheduler::firewall::slurmctld_port: 6817
 profile_slurm::scheduler::firewall::sources: []
@@ -66,7 +70,8 @@ profile_slurm::telegraf::telegraf::required_pkgs:
 profile_slurm::telegraf::telegraf::script_path: "/etc/telegraf/scripts/slurm"
 profile_slurm::telegraf::telegraf::slurm_database: "slurm_acct_db"
 profile_slurm::telegraf::telegraf::slurm_job_table: ""
-# Needs to be encrypted in your project control repo OR can be empty if using socket auth
+# Needs to be encrypted in your project control repo OR
+# can be empty if using socket auth
 profile_slurm::telegraf::telegraf::slurm_password: ""
 profile_slurm::telegraf::telegraf::slurm_path: "/usr/bin"
 profile_slurm::telegraf::telegraf::slurm_username: "slurmdbd"
