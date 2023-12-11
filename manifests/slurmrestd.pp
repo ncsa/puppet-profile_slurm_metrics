@@ -2,8 +2,12 @@
 #
 # Configure slurmrestd service.
 #
-# @example
-#   include profile_slurm::slurmrestd
+# @param dependencies
+#   Optionally list resources (e.g. mounts) that should be present before
+#   setting up Slurm on a node running slurmrestd as a service. Should be
+#   in the form that would be specified as a requirement ("before")
+#   Service[slurmrestd]. If the node is also the scheduler it generally
+#   makes sense to include "Service[slurmctld]".
 #
 # @param group_id
 #   GID of the slurmrestd group.
@@ -17,6 +21,10 @@
 # @param firewall_sources
 #   List of CIDRs to allow (can be empty).
 #
+# @param configure_after_dependencies
+#   Optionally list resources (e.g., services) that require any of the
+#   items from the $dependencies parameter in order to function.
+#
 # @param user_home
 #   Home dir of the slurmrestd service account.
 #
@@ -26,15 +34,20 @@
 # @param user_name
 #   Name of the slurmrestd service account.
 #
+# @example
+#   include profile_slurm::slurmrestd
+#
 class profile_slurm::slurmrestd (
 
-  Integer $group_id,
-  String  $group_name,
-  Integer $firewall_port,
-  Array   $firewall_sources,
-  String  $user_home,
-  Integer $user_id,
-  String  $user_name,
+  Array[String]  $dependencies,
+  Integer        $group_id,
+  String         $group_name,
+  Integer        $firewall_port,
+  Array          $firewall_sources,
+  Array[String]  $configure_after_dependencies,
+  String         $user_home,
+  Integer        $user_id,
+  String         $user_name,
 
 ) {
   group { $group_name:
@@ -63,6 +76,12 @@ class profile_slurm::slurmrestd (
       dport  => $firewall_port,
       source => $source,
       action => 'accept',
+    }
+  }
+
+  $dependencies.each | $dependency | {
+    $configure_after_dependencies.each | $dependent | {
+      $dependency -> $dependent
     }
   }
 }

@@ -17,7 +17,6 @@
 * [`profile_slurm::scheduler`](#profile_slurm--scheduler): Sets up configs for scheduler node
 * [`profile_slurm::scheduler::backup`](#profile_slurm--scheduler--backup): Add a backup job to backup slurm data.
 * [`profile_slurm::scheduler::firewall`](#profile_slurm--scheduler--firewall): Setup firewall on slurm scheduler
-* [`profile_slurm::scheduler::storage`](#profile_slurm--scheduler--storage)
 * [`profile_slurm::slurmrestd`](#profile_slurm--slurmrestd): Configure slurmrestd service.
 * [`profile_slurm::telegraf::slurm_accounting_stats`](#profile_slurm--telegraf--slurm_accounting_stats): Configure the telegraf collection script slurm_accounting_stats
 * [`profile_slurm::telegraf::slurm_detail_stats`](#profile_slurm--telegraf--slurm_detail_stats): Configure the telegraf collection script slurm_detail_stats
@@ -94,6 +93,36 @@ Setup slurm config for slurm compute node
 include profile_slurm::compute
 ```
 
+#### Parameters
+
+The following parameters are available in the `profile_slurm::compute` class:
+
+* [`dependencies`](#-profile_slurm--compute--dependencies)
+* [`configure_after_dependencies`](#-profile_slurm--compute--configure_after_dependencies)
+
+##### <a name="-profile_slurm--compute--dependencies"></a>`dependencies`
+
+Data type: `Array[String]`
+
+Optionally list resources (e.g. mounts) that should be present before
+setting up Slurm on a compute node. Should be in the form that would
+be specified as a requirement ("before") various Slurm compute
+resources, e.g.:
+  "Gpfs::Bindmount['/scratch']"
+  "Gpfs::Bindmount['/sw']"
+  "Gpfs::Bindmount['/u']"
+  "Gpfs::Nativemount['/cluster']"
+  "Lvm::Logical_volume[local]"
+  "Profile_lustre::Nativemount_resource['/projects']"
+  "Profile_lustre::Nativemount_resource['/taiga']"
+
+##### <a name="-profile_slurm--compute--configure_after_dependencies"></a>`configure_after_dependencies`
+
+Data type: `Array[String]`
+
+Optionally list resources (e.g., services) that require any of the
+items from the $dependencies parameter in order to function.
+
 ### <a name="profile_slurm--compute--storage"></a>`profile_slurm::compute::storage`
 
 Setup underlying storage for slurm compute nodes
@@ -103,35 +132,16 @@ Setup underlying storage for slurm compute nodes
 ##### 
 
 ```puppet
-include profile_slurm::scheduler::storage
+include profile_slurm::compute::storage
 ```
 
 #### Parameters
 
 The following parameters are available in the `profile_slurm::compute::storage` class:
 
-* [`require_storage`](#-profile_slurm--compute--storage--require_storage)
-* [`storage_dependencies`](#-profile_slurm--compute--storage--storage_dependencies)
 * [`tmpfs_dir`](#-profile_slurm--compute--storage--tmpfs_dir)
 * [`tmpfs_dir_refresh_command`](#-profile_slurm--compute--storage--tmpfs_dir_refresh_command)
 * [`tmpfs_dir_refreshed_by`](#-profile_slurm--compute--storage--tmpfs_dir_refreshed_by)
-
-##### <a name="-profile_slurm--compute--storage--require_storage"></a>`require_storage`
-
-Data type: `Array[String]`
-
-Optionally list resources (e.g., services) that require storage
-in order to function.
-
-##### <a name="-profile_slurm--compute--storage--storage_dependencies"></a>`storage_dependencies`
-
-Data type: `Array[String]`
-
-Optionally list resources (e.g. mounts) that should be present before
-setting up Slurm on a compute node. Should be in the form that would
-be specified as a requirement ("before") various Slurm compute (slurmd)
-resources, e.g.:
-  - "Lvm::Logical_volume::local"
 
 ##### <a name="-profile_slurm--compute--storage--tmpfs_dir"></a>`tmpfs_dir`
 
@@ -157,7 +167,7 @@ Resource which $tmpfs_dir requires and which should cause it to be
 refreshed (removed and recreated). If this is NOT defined, and
 $tmpfs_dir IS defined, then Puppet will simply ensure that $tmpfs_dir
 exists.
-E.g.: "Lvm::Logical_volume['local']"
+E.g.: "Lvm::Logical_volume[local]"
 
 ### <a name="profile_slurm--crons"></a>`profile_slurm::crons`
 
@@ -231,6 +241,36 @@ Sets up configs for scheduler node
 include profile_slurm::scheduler
 ```
 
+#### Parameters
+
+The following parameters are available in the `profile_slurm::scheduler` class:
+
+* [`dependencies`](#-profile_slurm--scheduler--dependencies)
+* [`configure_after_dependencies`](#-profile_slurm--scheduler--configure_after_dependencies)
+
+##### <a name="-profile_slurm--scheduler--dependencies"></a>`dependencies`
+
+Data type: `Array[String]`
+
+Optionally list resources (e.g. mounts) that should be present before
+setting up Slurm on a scheduler. Should be in the form that would
+be specified as a requirement ("before") various Slurm scheduler
+resources, e.g.:
+  "Mount['/slurm']"
+  "Mount['/var/log/slurm']"
+  "Mount['/var/spool/slurmctld.state']"
+If the node also runs the Slurm accounting DB, e.g., using MySQL/MariaDB,
+you will generally want to include that service to ensure it is running
+prior to slurmdbd starting.
+  "Service[mysqld]"
+
+##### <a name="-profile_slurm--scheduler--configure_after_dependencies"></a>`configure_after_dependencies`
+
+Data type: `Array[String]`
+
+Optionally list resources (e.g., services) that require any of the
+items from the $dependencies parameter in order to function.
+
 ### <a name="profile_slurm--scheduler--backup"></a>`profile_slurm::scheduler::backup`
 
 slurmdbd should be backed up via the mysql profile
@@ -285,42 +325,6 @@ Data type: `Array[String]`
 
 Array of CIDRs that need to be open for the slurmctld and slurmdbd service
 
-### <a name="profile_slurm--scheduler--storage"></a>`profile_slurm::scheduler::storage`
-
-The profile_slurm::scheduler::storage class.
-
-#### Examples
-
-##### 
-
-```puppet
-include profile_slurm::scheduler::storage
-```
-
-#### Parameters
-
-The following parameters are available in the `profile_slurm::scheduler::storage` class:
-
-* [`storage_dependencies`](#-profile_slurm--scheduler--storage--storage_dependencies)
-* [`require_storage`](#-profile_slurm--scheduler--storage--require_storage)
-
-##### <a name="-profile_slurm--scheduler--storage--storage_dependencies"></a>`storage_dependencies`
-
-Data type: `Array[String]`
-
-Optionally list resources (e.g. mounts) that should be present before
-setting up Slurm on a scheduler. Should be in the form that would
-be specified as a requirement ("before") various Slurm scheduler
-resources, e.g.:
-  Lvm::Logical_volume::mysql
-  Lvm::Logical_volume::slurm
-
-##### <a name="-profile_slurm--scheduler--storage--require_storage"></a>`require_storage`
-
-Data type: `Array[String]`
-
-
-
 ### <a name="profile_slurm--slurmrestd"></a>`profile_slurm::slurmrestd`
 
 Configure slurmrestd service.
@@ -337,13 +341,25 @@ include profile_slurm::slurmrestd
 
 The following parameters are available in the `profile_slurm::slurmrestd` class:
 
+* [`dependencies`](#-profile_slurm--slurmrestd--dependencies)
 * [`group_id`](#-profile_slurm--slurmrestd--group_id)
 * [`group_name`](#-profile_slurm--slurmrestd--group_name)
 * [`firewall_port`](#-profile_slurm--slurmrestd--firewall_port)
 * [`firewall_sources`](#-profile_slurm--slurmrestd--firewall_sources)
+* [`configure_after_dependencies`](#-profile_slurm--slurmrestd--configure_after_dependencies)
 * [`user_home`](#-profile_slurm--slurmrestd--user_home)
 * [`user_id`](#-profile_slurm--slurmrestd--user_id)
 * [`user_name`](#-profile_slurm--slurmrestd--user_name)
+
+##### <a name="-profile_slurm--slurmrestd--dependencies"></a>`dependencies`
+
+Data type: `Array[String]`
+
+Optionally list resources (e.g. mounts) that should be present before
+setting up Slurm on a node running slurmrestd as a service. Should be
+in the form that would be specified as a requirement ("before")
+Service[slurmrestd]. If the node is also the scheduler it generally
+makes sense to include "Service[slurmctld]".
 
 ##### <a name="-profile_slurm--slurmrestd--group_id"></a>`group_id`
 
@@ -368,6 +384,13 @@ Port number for slurmrestd.
 Data type: `Array`
 
 List of CIDRs to allow (can be empty).
+
+##### <a name="-profile_slurm--slurmrestd--configure_after_dependencies"></a>`configure_after_dependencies`
+
+Data type: `Array[String]`
+
+Optionally list resources (e.g., services) that require any of the
+items from the $dependencies parameter in order to function.
 
 ##### <a name="-profile_slurm--slurmrestd--user_home"></a>`user_home`
 

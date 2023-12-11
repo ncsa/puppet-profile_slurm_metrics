@@ -41,7 +41,7 @@ For a Slurm scheduler:
 include ::profile_slurm::scheduler
 ```
 
-For a Slurm monitor node (Include this on the node that hosts the `slurmdb`):
+For a Slurm monitor node (Include this on the node that runs `slurmdbd`):
 ```ruby
 include ::profile_slurm::monitor
 ```
@@ -52,6 +52,7 @@ include ::profile_slurm::slurmrestd
 ```
 NOTE: This has NOT been tested on a standalone node, only on a scheduler.
 NOTE: Having slurmrestd to listen on the internet is not a great idea, and it's very bad if there is no web proxy in front of it for additional security. Configuration of such a proxy is not covered by this profile.
+
 
 ## Usage
 
@@ -65,10 +66,15 @@ You will generally want to manage the firewall as well as dependencies on local 
 ```yaml
 profile_slurm::client::firewall::sources:
   - "192.168.0.0/24"  # Allow access to slurmd from 192.168.0.0/24 net
-profile_slurm::compute::storage::storage_dependencies:
-  - "Mount['/local']"
+profile_slurm::compute::dependencies:
+  - "Gpfs::Bindmount['/scratch']"
+...
+  - "Gpfs::Nativemount['cluster']"
+  - "Lvm::Logical_volume[local]"
+  - "Profile_lustre::Nativemount_resource['/projects']"
+...
 profile_slurm::compute::storage::tmpfs_dir: "/local/slurmjobs"
-profile_slurm::compute::storage::tmpfs_dir_refreshed_by: "Mount[/local]"
+profile_slurm::compute::storage::tmpfs_dir_refreshed_by: "Lvm::Logical_volume[local]"
 ```
 
 You will want to set these hiera variables for scheduler nodes:
@@ -76,8 +82,8 @@ You will want to set these hiera variables for scheduler nodes:
 profile_slurm::scheduler::firewall::sources:
   - "192.168.0.0/24"  # Allow access to slurmdbd and slurmctld from 192.168.0.0/24 net
 # and generally specify dependencies on local storage:
-profile_slurm::scheduler::storage::storage_dependencies:
-  - "Mount['/var/lib/mysql']"
+profile_slurm::scheduler::dependencies:
+  - "Mount['/slurm']"
   - "Mount['/var/log/slurm']"
   - "Mount['/var/spool/slurmctld.state']"
 ```
@@ -85,6 +91,9 @@ profile_slurm::scheduler::storage::storage_dependencies:
 To set up slurmrestd on a scheduler, configure these Hiera variables:
 ```yaml
 # common.yaml:
+## make slurmrestd dependent on slurmctld
+profile_slurm::slurmrestd::dependencies:
+  - "Service['slurmctld']"
 ## open up the firewall, if needed
 profile_slurm::slurmrestd::firewall_sources:
   - "A.B.C.D/XX"  # cluster network
@@ -106,8 +115,8 @@ slurm::slurmrestd_listen_address: 172.31.2.8
 
 To install arbitrary files and symlinks, set this Hiera variable:
 ```yaml
-profile_slurm::files::file: {}
-
+profile_slurm::files::files:
+  ...
 ```
 
 ### Telegraf Monitoring
@@ -131,6 +140,7 @@ profile_slurm::telegraf::telegraf::slurm_password: "%{lookup('slurm::slurmdbd_st
 ## Dependencies
 
 n/a
+
 
 ## Reference
 

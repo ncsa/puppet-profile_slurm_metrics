@@ -1,4 +1,8 @@
 ---
+lookup_options:
+  "profile_slurm::(.*)::(.*)dependencies$":
+    merge:
+      strategy: "unique"
 
 anchors:
   - &slurmrestd_group_name
@@ -13,9 +17,11 @@ anchors:
 profile_slurm::client::firewall::slurmd_port: 6818
 profile_slurm::client::firewall::sources: []
 
-profile_slurm::compute::storage::require_storage:
+profile_slurm::compute::dependencies:
+  - "Service['sssd']"
+profile_slurm::compute::configure_after_dependencies:
   - "Service['slurmd']"
-profile_slurm::compute::storage::storage_dependencies: []
+
 profile_slurm::compute::storage::tmpfs_dir: null
 profile_slurm::compute::storage::tmpfs_dir_refresh_command: null
 profile_slurm::compute::storage::tmpfs_dir_refreshed_by: null
@@ -23,6 +29,12 @@ profile_slurm::compute::storage::tmpfs_dir_refreshed_by: null
 profile_slurm::crons::crons: {}
 
 profile_slurm::files::files: {}
+
+profile_slurm::scheduler::dependencies:
+  - "Service['sssd']"
+profile_slurm::scheduler::configure_after_dependencies:
+  - "Service['slurmctld']"
+  - "Service['slurmdbd']"
 
 profile_slurm::scheduler::backup::locations:
   - "/var/spool/slurmctld.state"
@@ -32,18 +44,16 @@ profile_slurm::scheduler::firewall::slurmdbd_port: 6819
 profile_slurm::scheduler::firewall::slurmctld_port: 6817
 profile_slurm::scheduler::firewall::sources: []
 
-profile_slurm::scheduler::storage::require_storage:
-  - "Service['mysqld']"
-  - "Service['slurmctld']"
-  - "Service['slurmdbd']"
-profile_slurm::scheduler::storage::storage_dependencies: []
-
 # note: there are no "official" IDs for slurmrestd, but
 # slurm is usually 93 and 94 doesn't seem to be widely used
+profile_slurm::slurmrestd::dependencies:
+  - "Service['sssd']"
 profile_slurm::slurmrestd::group_id: 94
 profile_slurm::slurmrestd::group_name: *slurmrestd_group_name
 profile_slurm::slurmrestd::firewall_port: *slurmrestd_port
 profile_slurm::slurmrestd::firewall_sources: []
+profile_slurm::slurmrestd::configure_after_dependencies:
+  - "Service['slurmrestd']"
 profile_slurm::slurmrestd::user_home: *slurmrestd_user_home
 profile_slurm::slurmrestd::user_id: 94
 profile_slurm::slurmrestd::user_name: *slurmrestd_user_name
