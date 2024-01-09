@@ -86,6 +86,11 @@ profile_slurm::scheduler::dependencies:
   - "Mount['/slurm']"
   - "Mount['/var/log/slurm']"
   - "Mount['/var/spool/slurmctld.state']"
+# lower this timeout from default of 60 sec; this prevents Puppet runs from
+# taking an excessive amount of time if the id_check fails (in which case
+# slurmctld will fail to start but Puppet will try to contact slurmctld
+# until this timeout is reached, prior to running 'scontrol reconfig')
+slurm::slurmctld_conn_validator_timeout: 20
 ```
 
 To set up slurmrestd on a scheduler, configure these Hiera variables:

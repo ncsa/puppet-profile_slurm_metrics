@@ -13,6 +13,7 @@
 * [`profile_slurm::compute::storage`](#profile_slurm--compute--storage): Setup underlying storage for slurm compute nodes
 * [`profile_slurm::crons`](#profile_slurm--crons): Manage Ad-hoc crons and related scripts.
 * [`profile_slurm::files`](#profile_slurm--files): Support installation of arbitrary files.
+* [`profile_slurm::id_check`](#profile_slurm--id_check): Verify that identity services (e.g., sssd) are working.
 * [`profile_slurm::monitor`](#profile_slurm--monitor): Sets up monitoring and collecting of slurm scheduler stats
 * [`profile_slurm::scheduler`](#profile_slurm--scheduler): Sets up configs for scheduler node
 * [`profile_slurm::scheduler::backup`](#profile_slurm--scheduler--backup): Add a backup job to backup slurm data.
@@ -99,6 +100,7 @@ The following parameters are available in the `profile_slurm::compute` class:
 
 * [`dependencies`](#-profile_slurm--compute--dependencies)
 * [`configure_after_dependencies`](#-profile_slurm--compute--configure_after_dependencies)
+* [`slurmd_id_check_dropin_content`](#-profile_slurm--compute--slurmd_id_check_dropin_content)
 
 ##### <a name="-profile_slurm--compute--dependencies"></a>`dependencies`
 
@@ -122,6 +124,14 @@ Data type: `Array[String]`
 
 Optionally list resources (e.g., services) that require any of the
 items from the $dependencies parameter in order to function.
+
+##### <a name="-profile_slurm--compute--slurmd_id_check_dropin_content"></a>`slurmd_id_check_dropin_content`
+
+Data type: `String`
+
+Content for a systemd dropin file that ensures the service
+will only start up if the receipt file from
+profile_slurm::id_check exists.
 
 ### <a name="profile_slurm--compute--storage"></a>`profile_slurm::compute::storage`
 
@@ -217,6 +227,36 @@ Data type: `Hash`
 
 File resources.
 
+### <a name="profile_slurm--id_check"></a>`profile_slurm::id_check`
+
+The primary use case is to ensure that sssd is configured
+and running prior to starting slurmctld so we do not lose
+reservations or prevent users from submitting jobs (both of
+which require resolution of users and groups/membership).
+
+Verify that identity services (e.g., sssd) are working.
+
+#### Examples
+
+##### 
+
+```puppet
+include profile_slurm::id_check
+```
+
+#### Parameters
+
+The following parameters are available in the `profile_slurm::id_check` class:
+
+* [`group`](#-profile_slurm--id_check--group)
+
+##### <a name="-profile_slurm--id_check--group"></a>`group`
+
+Data type: `String`
+
+Group to check for in order to verify that identity services
+are working.
+
 ### <a name="profile_slurm--monitor"></a>`profile_slurm::monitor`
 
 Sets up monitoring and collecting of slurm scheduler stats
@@ -247,6 +287,7 @@ The following parameters are available in the `profile_slurm::scheduler` class:
 
 * [`dependencies`](#-profile_slurm--scheduler--dependencies)
 * [`configure_after_dependencies`](#-profile_slurm--scheduler--configure_after_dependencies)
+* [`slurmctld_id_check_dropin_content`](#-profile_slurm--scheduler--slurmctld_id_check_dropin_content)
 
 ##### <a name="-profile_slurm--scheduler--dependencies"></a>`dependencies`
 
@@ -270,6 +311,14 @@ Data type: `Array[String]`
 
 Optionally list resources (e.g., services) that require any of the
 items from the $dependencies parameter in order to function.
+
+##### <a name="-profile_slurm--scheduler--slurmctld_id_check_dropin_content"></a>`slurmctld_id_check_dropin_content`
+
+Data type: `String`
+
+Content for a systemd dropin file that ensures the service
+will only start up if the receipt file from
+profile_slurm::id_check exists.
 
 ### <a name="profile_slurm--scheduler--backup"></a>`profile_slurm::scheduler::backup`
 

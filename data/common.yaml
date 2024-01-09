@@ -18,9 +18,14 @@ profile_slurm::client::firewall::slurmd_port: 6818
 profile_slurm::client::firewall::sources: []
 
 profile_slurm::compute::dependencies:
+  - "Exec['slurm_id_check']"
   - "Service['sssd']"
 profile_slurm::compute::configure_after_dependencies:
   - "Service['slurmd']"
+profile_slurm::compute::slurmd_id_check_dropin_content: |
+  # File managed by puppet
+  [Unit]
+  ConditionPathExists=/etc/slurm/id_check_success
 
 profile_slurm::compute::storage::tmpfs_dir: null
 profile_slurm::compute::storage::tmpfs_dir_refresh_command: null
@@ -31,10 +36,15 @@ profile_slurm::crons::crons: {}
 profile_slurm::files::files: {}
 
 profile_slurm::scheduler::dependencies:
+  - "Exec['slurm_id_check']"
   - "Service['sssd']"
 profile_slurm::scheduler::configure_after_dependencies:
   - "Service['slurmctld']"
   - "Service['slurmdbd']"
+profile_slurm::scheduler::slurmctld_id_check_dropin_content: |
+  # File managed by puppet
+  [Unit]
+  ConditionPathExists=/etc/slurm/id_check_success
 
 profile_slurm::scheduler::backup::locations:
   - "/var/spool/slurmctld.state"
