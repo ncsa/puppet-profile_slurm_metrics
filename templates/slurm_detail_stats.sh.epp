@@ -122,7 +122,7 @@ while read -r p; do
 done <"${tfile2}"
 
 ## Node Roll Up Stats
-"${slurm_path}"/scontrol show nodes | grep 'NodeName\|CfgTRES\|State' > "${tfile}"
+"${slurm_path}"/scontrol show nodes | grep 'NodeName\|CfgTRES\|State' | grep -v "NextState=" > "${tfile}"
 "${slurm_path}"/sinfo -N > "${tfile2}"
 for n in "${all_node_list[@]}"
 do
