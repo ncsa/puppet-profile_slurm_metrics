@@ -128,7 +128,12 @@ done
 
 IFS=" " read slurm_server_thread_count slurm_agent_queue_size slurm_agent_count slurm_agent_thread_count slurm_dbd_agent_queue_size slurm_jobs_submitted slurm_jobs_started slurm_jobs_completed slurm_jobs_canceled slurm_jobs_failed <<< "$(cat $tf | grep -A 12 "Data since" | tail -n +3 | cut -d':' -f 2 | sed -e 's/^[[:space:]]*//' | xargs)"
 
-IFS=" " read slurm_last_cycle_time slurm_max_cycle_time slurm_total_cycles slurm_mean_cycle slurm_mean_depth_cycle slurm_cycles_per_minute slurm_last_queue_length <<< "$(cat ${tf} | grep -A 7 "Main schedule statistics" | tail -n +2 | cut -d':' -f 2 | sed -e 's/^[[:space:]]*//' | xargs)"
+if [ -z "$(cat ${tf} | grep -A 7 "Main schedule statistics" | grep -i minute)" ]; then
+	IFS=" " read slurm_last_cycle_time slurm_max_cycle_time slurm_total_cycles slurm_mean_cycle slurm_mean_depth_cycle slurm_last_queue_length <<< "$(cat ${tf} | grep -A 7 "Main schedule statistics" | tail -n +2 | cut -d':' -f 2 | sed -e 's/^[[:space:]]*//' | xargs)"
+	slurm_cycles_per_minute=1
+else
+	IFS=" " read slurm_last_cycle_time slurm_max_cycle_time slurm_total_cycles slurm_mean_cycle slurm_mean_depth_cycle slurm_cycles_per_minute slurm_last_queue_length <<< "$(cat ${tf} | grep -A 7 "Main schedule statistics" | tail -n +2 | cut -d':' -f 2 | sed -e 's/^[[:space:]]*//' | xargs)"
+fi
 
 if [ $("${slurm_path}"/squeue -t running | wc -l) -lt 2 ]; then
 	IFS=" " read slurm_tot_backfill_jobs_from_start slurm_tot_backfill_jobs_from_cycle slurm_backfill_het_job_components slurm_total_cycles_backfill slurm_last_cycle_backfill slurm_max_cycle_backfill slurm_last_depth_cycle_backfill slurm_last_depth_cycle_try_backfill slurm_last_queue_length_backfill slurm_last_table_size_backfill <<< "$(cat ${tf} | grep -A 11 "Backfilling stats" | tail -n +2 | grep -v "Last cycle when" | cut -d':' -f 2- | sed -e 's/^[[:space:]]*//' | xargs)"
