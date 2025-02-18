@@ -35,6 +35,7 @@ class profile_slurm::scheduler (
   include profile_slurm::files
   include profile_slurm::id_check
   include profile_slurm::scheduler::firewall
+  include profile_slurm::scheduler::mailprog
   include systemd
 
   $dependencies.each | $dependency | {

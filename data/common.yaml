@@ -54,6 +54,8 @@ profile_slurm::scheduler::firewall::slurmdbd_port: 6819
 profile_slurm::scheduler::firewall::slurmctld_port: 6817
 profile_slurm::scheduler::firewall::sources: []
 
+profile_slurm::scheduler::mailprog::sendas_address: null
+
 # note: there are no "official" IDs for slurmrestd, but
 # slurm is usually 93 and 94 doesn't seem to be widely used
 profile_slurm::slurmrestd::dependencies:

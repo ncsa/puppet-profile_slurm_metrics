@@ -124,6 +124,14 @@ profile_slurm::files::files:
   ...
 ```
 
+A mailprog.sh script can be set up which, when configured as MailProg,
+will cause Slurm to send email using an alernate FROM address (something
+other than the node's default FROM address). To do this, define
+`profile_slurm::scheduler::mailprog::sendas_address`. You will still
+need set set MailProg in slurm.conf using the `slurm` Puppet module.
+* A send-as/from address does not need to be a deliverable address, but the intent of this feature is that it would be, and using a deliverable address may decrease the likelihood of email from Slurm being rejected and not delivered.
+* Instructions for setting up a campus email mailbox (which might generally have 'noreply' in its name) are here: https://wiki.ncsa.illinois.edu/display/ICI/Cluster-Specific+Email+Mailbox+for+Root+Email+or+No-Reply
+
 ### Telegraf Monitoring
 
 You will want to set these hiera variables for a node running the telegraf monitoring:
