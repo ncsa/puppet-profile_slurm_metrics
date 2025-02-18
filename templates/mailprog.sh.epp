@@ -1,0 +1,12 @@
+#!/bin/bash
+# mailprog.sh: Managed by Puppet
+
+# SCRIPT ARGS SENT BY SLURM:
+# first arg is '-s'
+# last arg is recipient email address
+recipient=${@: -1}
+# all middle args are the subject
+subject=${@:2:$#-2}
+
+# send email with empty body and appropriate subject to the recipient
+echo "" | /bin/mail -r <%= $profile_slurm::scheduler::mailprog::sendas_address %> -s "$subject" $recipient

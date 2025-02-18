@@ -124,6 +124,12 @@ profile_slurm::files::files:
   ...
 ```
 
+A mailprog.sh script can be set up which, when configured as MailProg,
+will cause Slurm to send email using an alernate FROM address (something
+other than the node's default FROM address). To do this, define
+`profile_slurm::scheduler::mailprog::sendas_address`. You will still
+need set set MailProg in slurm.conf using the `slurm` Puppet module.
+
 ### Telegraf Monitoring
 
 You will want to set these hiera variables for a node running the telegraf monitoring:
