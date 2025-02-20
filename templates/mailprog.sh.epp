@@ -8,5 +8,7 @@ recipient=${@: -1}
 # all middle args are the subject
 subject=${@:2:$#-2}
 
-# send email with empty body and appropriate subject to the recipient
+# SLURM DOES NOT SEND A BODY TO MAILPROG
+# the entire message is in the subject
+
 echo "" | /bin/mail -r <%= $profile_slurm::scheduler::mailprog::sendas_address %> -s "$subject" $recipient
